@@ -44,10 +44,9 @@ class Grade:
     self.course = course
     self.grade_date = grade_date
 
-# dont make it dataclass if it is hard for you, make normal class
+
 
 class Student:
-  #okay, thanks
 
   def __init__(self, name, surname):
     self.name = name
