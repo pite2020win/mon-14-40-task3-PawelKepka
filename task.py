@@ -30,7 +30,9 @@
 #Good luck.
 
 from dataclasses import dataclass
+from statistics import mean
 import datetime
+import random
 
 
 @dataclass
@@ -39,19 +41,11 @@ class Grade:
   course: str
   grade_date: datetime
 
-  def __init__(self, grade, course, grade_date):
-    self.grade = grade
-    self.course = course
-    self.grade_date = grade_date
-
-# dont make it dataclass if it is hard for you, make normal class
 
 class Student:
-  #okay, thanks
 
-  def __init__(self, name, surname):
+  def __init__(self, name):
     self.name = name
-    self.surname = surname
     self.grades = list()
 
   def new_grade(self, course, grade, grade_date):
@@ -59,19 +53,34 @@ class Student:
     self.grades.append(new_grade)
 
   def average_course_grades(self, course):
-    #no time to make it for special one course
-    average = 0.0
-    for i in self.grades:
-      average += self.grades[i].grade
-    return average/len(self.grades)
+    if not self.grades:
+      return 0 
+    filtered_grades = [g.grade for g in self.grades]
+    print(filtered_grades)
+    return mean(filtered_grades)
 
 
 if __name__ == "__main__":
 
-  student = Student("Jan", "Kowalski")
-  today_date = datetime.datetime(2020, 11, 9)
-  student.new_grade("PitE", 3.0, today_date)
-  print("New grade {} for student {} {} at {}".format(3.0, student.name, student.surname, today_date.strftime("%x")))
+  random.seed(a=None, version = 2)
+  file = open("names.txt", "r")
+  students = list() 
 
-  print("Student average grade: {} ".format(student.average_course_grades))
+  for i in range(12):
+    student_name = file.readline()
+    student = Student(student_name)
+    students.append(student)
+
+  courses = ["PitE", "C course", "Physics"]
+  grades = [2.0, 3.0, 3.5, 4.0, 4.5, 5.0]
+  today_date = datetime.datetime(2020, 11, 23)
+
+  for i in range(20):
+    course = courses[random.randrange(2)]
+    grade = grades[random.randrange(5)]
+    student_index = random.randrange(11)
+    students[student_index].new_grade(course, grade, today_date)
+    print("New grade {} for student {} for course {}".format(grade, students[student_index].name, course))
+
+  print("Student average grade: {} for PitE".format(students[0].average_course_grades("PitE")))
 
